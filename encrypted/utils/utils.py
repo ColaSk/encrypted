@@ -15,5 +15,6 @@ import random
 from encrypted.conf.setting import Setting as setting
 
 def random_str(slen=100, seed=setting.seed):
+    """Randomly selects a string of the specified length from the seed"""
     sa = ''.join(random.choice(seed) for _ in range(slen))
     return sa

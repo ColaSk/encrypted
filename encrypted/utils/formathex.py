@@ -13,8 +13,9 @@
 
 from rsa import transform
 
-def format_string_hex_data(random_str):
-    rt = [hex(ord(s)).lstrip("0x") for s in random_str]
+def string_to_hex_format(string):
+    """Formats a string as a list of hexadecimal characters"""
+    rt = [hex(ord(s)).lstrip("0x") for s in string]
     return rt
 
 def disassemble_iv_hex(iv_str):
