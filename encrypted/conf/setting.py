@@ -11,9 +11,7 @@
 
 # here put the import lib
 class Setting:
-    work_secret_key_plaintext = "eCW5rd#NUKJZS5%vXpqIM2!W!Bw$FC9I"
-    iv = "57656e747870493921387a3647636431"
-    work_secret_key_cipher_str = "57656e747870493921387a3647636431&acc60f1d1655d25a1b5c275c3fd8bf8f822c09e47a227001197b9cd92dcefd6e091d567b220cebeccbd188f4a2f13b58"
-    seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
+    status_keys_plaintext = "6x*bUITKm9LnVDYPlk&h7gIQ@-K+WSiMdhFTNV4Un&%0CX%FNQsyxdB!)zpoC5f9uAQ_(1QoxV8WkkqdXUwpcX^JeuOBGJ*3j_ue"
+    public_key = '7826755475335973576d23353d79214a&af603f9b78a41f1e9f50ea9c6ad3ef0a6032b29c80118c4568f9ab08adc41e5b'
 
-    status_key = 'uYdMvnFxS$KTjb8C9f)Z7_yeKSzn-iYW)BodWsZ4$g5OZThwl5)FSx$zfiYj6!oqfhd2FeIKsmRO+hNqJAKY_AGFdbnym8^CDwM%'
+    seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"

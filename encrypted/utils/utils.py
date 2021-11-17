@@ -20,9 +20,12 @@ def random_str(slen=100, seed=setting.seed):
     sa = ''.join(random.choice(seed) for _ in range(slen))
     return sa
 
-def str2ASCII(string):
+def str2ASCIIiter(string):
     for s in string:
         yield ord(s)
+
+def str2ASCII(string):
+    return [s for s in str2ASCIIiter(string)]
 
 def bytes2hex(b):
     """bytes->10->16"""
@@ -41,4 +44,15 @@ def hex2bytes(h):
 def str2hexstr(string):
     """Formats a string as a list of hexadecimal characters"""
     rt = [hex(ord(s)).lstrip("0x") for s in string]
+    return ''.join(rt)
+
+def hexstr2str(string):
+    """Hexadecimal string to string
+    * string: 46574f69336170385e70763525523d52
+    * rt: FWOi3ap8^pv5%R=R
+    """
+    hexs = [string[i:i+2] for i in range(len(string)) if i%2==0]
+    ints = [int(h, 16) for h in hexs]
+    bs = [transform.int2bytes(h) for h in ints]
+    rt = [b.decode("utf-8") for b in bs]
     return ''.join(rt)
