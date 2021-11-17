@@ -15,3 +15,5 @@ class Setting:
     iv = "57656e747870493921387a3647636431"
     work_secret_key_cipher_str = "57656e747870493921387a3647636431&acc60f1d1655d25a1b5c275c3fd8bf8f822c09e47a227001197b9cd92dcefd6e091d567b220cebeccbd188f4a2f13b58"
     seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
+
+    status_key = 'uYdMvnFxS$KTjb8C9f)Z7_yeKSzn-iYW)BodWsZ4$g5OZThwl5)FSx$zfiYj6!oqfhd2FeIKsmRO+hNqJAKY_AGFdbnym8^CDwM%'

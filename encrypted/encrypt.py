@@ -16,33 +16,24 @@ from encrypted.conf.setting import Setting as setting
 from .utils.formathex import (disassemble_iv_hex, 
                               iv_hex_to_str, 
                               string_to_hex_format)
-from .utils.gen_root_secret_key import gen_root_secret_key_str
+from .utils import get_private_key
 from .utils.utils import random_str
-
+from .utils.public_key import de_public_key
 
 class EncryptCore(object):
 
-    def __init__(self,public_key=None, private_key=None):
+    def __init__(self, public_key, private_key):
 
-        self.__public_key = public_key if public_key else setting.work_secret_key_cipher_str
-        self.__private_key = private_key if private_key else gen_root_secret_key_str()
+        self.__public_key = public_key
+        self.__private_key = private_key 
 
-    def __de_work_secret_key(self, root_secret_key_str, work_secret_key_cipher_str):
-        # 解码工作秘钥明文
-        root_secret_key = transform.int2bytes(root_secret_key_str)
-        iv, work_secret_key_cipher = work_secret_key_cipher_str.split('&')
-        work_secret_key_int = int(work_secret_key_cipher, 16)
-        work_secret_key_bytes = transform.int2bytes(work_secret_key_int)
-        iv_hex_list = disassemble_iv_hex(iv)
-        iv_str = iv_hex_to_str(iv_hex_list)
-        aes_obj = aes.new(root_secret_key, aes.MODE_CBC, bytes(iv_str.encode("utf-8")))
-        work_secret_key_plaintext = aes_obj.decrypt(work_secret_key_bytes)
-        work_secret_key_plaintext = work_secret_key_plaintext.strip()
+    def __de_public_key(self, private_key, public_key):
 
-        return work_secret_key_plaintext
+        public_key_plaintext = de_public_key(public_key, private_key)
+
+        return public_key_plaintext
     
-    def __en_by_work_key_plaintext(self, string, key):
-        # 使用工作秘钥明文对密码进行加密
+    def __en_by_public_key_plaintext(self, string, key):
 
         # 偏移 iv
         iv = random_str(16)
@@ -54,7 +45,7 @@ class EncryptCore(object):
         string += " "*result_length
         
         # aes 加密
-        aes_ = aes.new(key, aes.MODE_CBC, bytes(iv.encode("utf-8")))
+        aes_ = aes.new(bytes(key.encode("utf-8")), aes.MODE_CBC, bytes(iv.encode("utf-8")))
         cipher_bytes = aes_.encrypt(string.encode("utf-8"))
 
         cipher_int = transform.bytes2int(cipher_bytes)
@@ -63,8 +54,7 @@ class EncryptCore(object):
 
         return cipher_str
     
-    def __de_by_work_key_plaintext(self, cipher, key):
-        # 使用工作秘钥明文对密码进行解密
+    def __de_by_public_key_plaintext(self, cipher, key):
 
         iv, cipher_hex = cipher.split("&")
         cipher_int = int(cipher_hex, 16)
@@ -72,23 +62,23 @@ class EncryptCore(object):
 
         iv_hex_list = disassemble_iv_hex(iv)
         iv_str = iv_hex_to_str(iv_hex_list)
-        aes_ = aes.new(key, aes.MODE_CBC, bytes(iv_str.encode("utf-8")))
+        aes_ = aes.new(bytes(key.encode("utf-8")), aes.MODE_CBC, bytes(iv_str.encode("utf-8")))
         
         string = aes_.decrypt(cipher_bytes)
         rt = string.decode("utf-8").replace(" ", "")
 
         return rt
 
-    def encode(self, password):
+    def encode(self, string):
 
-        work_secret_key_plaintext = self.__de_work_secret_key(self.__private_key, self.__public_key)
-        password_cipher_str = self.__en_by_work_key_plaintext(password, work_secret_key_plaintext)
+        public_key_plaintext = self.__de_public_key(self.__private_key, self.__public_key)
+        password_cipher_str = self.__en_by_public_key_plaintext(string, public_key_plaintext)
 
         return password_cipher_str
 
-    def decode(self, password_cipher):
+    def decode(self, string_cipher):
 
-        work_secret_key_plaintext = self.__de_work_secret_key(self.__private_key, self.__public_key)
-        password = self.__de_by_work_key_plaintext(password_cipher, work_secret_key_plaintext)
+        public_key_plaintext = self.__de_public_key(self.__private_key, self.__public_key)
+        string = self.__de_by_public_key_plaintext(string_cipher, public_key_plaintext)
 
-        return password
+        return string
