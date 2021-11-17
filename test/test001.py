@@ -1,12 +1,35 @@
 import sys
 sys.path.append('../')
 
-from encrypted.encrypt import EncryptCore
-from encrypted.conf.setting import Setting as setting
+from encrypted import EncryptCore, create_private_key, create_public_key
+from encrypted.utils import YamlFile, de_public_key
+
 if __name__ == '__main__':
+
     pwd = '123456'
-    work_secret_key_cipher_str = setting.work_secret_key_cipher_str
-    ec = EncryptCore(work_secret_key_cipher_str)
+    yf = YamlFile('/home/sk/project/encrypted/test/test.yaml')
+    dyn_b_key = yf.read()
+    dyn_int_list = [int(d, 16) for d in dyn_b_key.get('random_int').split('&')]
+
+    status_keys_plaintext = "6x*bUITKm9LnVDYPlk&h7gIQ@-K+WSiMdhFTNV4Un&%0CX%FNQsyxdB!)zpoC5f9uAQ_(1QoxV8WkkqdXUwpcX^JeuOBGJ*3j_ue"
+    dynamic_keys_plaintext = "+Vflf@*GW(kt)rahjbXtMC3ye)QjRFJIq%aOt5PsaUVhg%&TmGWw(cE%k)Th86(#5dK3noH5XJ@B!lw!oqAGl-EkYQkoF6MrMOWY"
+    public_key_plaintext = "eCW5rd#NUKJZS5%vXpqIM2!W!Bw$FC9I"
+
+    # status_key = str2ASCII(status_keys_plaintext)
+    # dynamic_key = dyn_int_list
+
+    private_key = create_private_key(status_keys_plaintext, dynamic_keys_plaintext)
+    
+    print('private_key: ', private_key)
+
+    public_key = create_public_key(public_key_plaintext, private_key) # str
+    public_key_pt = de_public_key(public_key, private_key) # str
+
+    print('public_key: ', public_key)
+    print('public_key_pt', public_key_pt)
+
+    ec = EncryptCore(public_key, private_key)
+
     en_pwd = ec.encode(pwd)
     de_pwd = ec.decode(en_pwd)
 

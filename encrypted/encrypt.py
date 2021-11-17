@@ -80,34 +80,13 @@ class EncryptCore(object):
         return string
 
 
-def parse_dynamic_key_file_data(data):
-    return ''.join([transform.int2bytes(int(d, 16)).decode("utf-8") 
-                    for d in data.get('random_int').split('&')])
-
-
-def create_dynamic_key_file_data(dynamic_key):
-    return '&'.join([hex(ord(s)).lstrip("0x") for s in dynamic_key])
-
-
-def create_dynamic_key_file(path, dynamic_key):
-    yfile = YamlFile(path)
-    data = create_dynamic_key_file_data(dynamic_key)
-    yfile.write({'random_int': data})
-
-    return path
-
-
-def create_private_key(status_key_plaintext, dynamic_key_plaintext, dynamic_key_file=None):
+def create_private_key(status_key_plaintext, dynamic_key_plaintext):
     static_int_list = str2ASCII(status_key_plaintext)
     dynamic_int_list = str2ASCII(dynamic_key_plaintext)
     
     private_key = get_private_key(static_int_list, dynamic_int_list)
     
-    path = None
-    if dynamic_key_file:
-        path = create_dynamic_key_file(dynamic_key_file, dynamic_key_plaintext)
-    
-    return private_key, path
+    return private_key
 
 
 def create_public_key(public_key_plaintext, private_key):
