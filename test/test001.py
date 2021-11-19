@@ -7,9 +7,6 @@ from encrypted.utils import YamlFile, de_public_key
 if __name__ == '__main__':
 
     pwd = '123456'
-    yf = YamlFile('/home/sk/project/encrypted/test/test.yaml')
-    dyn_b_key = yf.read()
-    dyn_int_list = [int(d, 16) for d in dyn_b_key.get('random_int').split('&')]
 
     status_keys_plaintext = "6x*bUITKm9LnVDYPlk&h7gIQ@-K+WSiMdhFTNV4Un&%0CX%FNQsyxdB!)zpoC5f9uAQ_(1QoxV8WkkqdXUwpcX^JeuOBGJ*3j_ue"
     dynamic_keys_plaintext = "+Vflf@*GW(kt)rahjbXtMC3ye)QjRFJIq%aOt5PsaUVhg%&TmGWw(cE%k)Th86(#5dK3noH5XJ@B!lw!oqAGl-EkYQkoF6MrMOWY"

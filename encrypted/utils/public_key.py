@@ -23,7 +23,7 @@ def en_public_key(public_key_plaintext, private_key):
         private_key ([int]): 私钥
 
     Returns:
-        [str]: [description]
+        [str]: 公钥密文
     """    
 
     iv = random_str(16)
@@ -45,7 +45,16 @@ def en_public_key(public_key_plaintext, private_key):
     return public_key
 
 
-def de_public_key(public_key, private_key):
+def de_public_key(public_key: str, private_key: int):
+    """解密公钥
+
+    Args:
+        public_key (str): 公钥密文
+        private_key (int): 私钥密文
+
+    Returns:
+        [str]: 公钥明文
+    """    
 
     private_key = transform.int2bytes(private_key)
 
