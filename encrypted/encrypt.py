@@ -25,7 +25,7 @@ class EncryptCore(object):
         self.__public_key = public_key
         self.__private_key = private_key 
 
-    def __de_public_key(self, private_key: int, public_key: str):
+    def __de_public_key(self):
         """解密公钥
 
         Args:
@@ -36,7 +36,7 @@ class EncryptCore(object):
             [str]: 公钥明文
         """        
 
-        public_key_plaintext = de_public_key(public_key, private_key)
+        public_key_plaintext = de_public_key(self.__public_key, self.__private_key)
 
         return public_key_plaintext
     
@@ -99,14 +99,14 @@ class EncryptCore(object):
 
     def encode(self, string):
 
-        public_key_plaintext = self.__de_public_key(self.__private_key, self.__public_key)
+        public_key_plaintext = self.__de_public_key()
         password_cipher_str = self.__en_by_public_key_plaintext(string, public_key_plaintext)
 
         return password_cipher_str
 
     def decode(self, string_cipher):
 
-        public_key_plaintext = self.__de_public_key(self.__private_key, self.__public_key)
+        public_key_plaintext = self.__de_public_key()
         string = self.__de_by_public_key_plaintext(string_cipher, public_key_plaintext)
 
         return string
